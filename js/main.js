@@ -58,7 +58,9 @@ var Scroll = {};
                     dragStartPagePosition = e.pageY;
                     dragStartScrollPosition = self.$cont[0].scrollTop;
                     dragContBarRate = self.getMaxScrollPosition()/self.getMaxSliderPosition();
-                    doc.on('mousemove.scroll', mousemoveHandler).on('mouseup.scroll',function(e){
+                    doc.on('mousemove.scroll',
+                            mousemoveHandler)
+                       .on('mouseup.scroll',function(e){
                         e.preventDefault();
                         doc.off('.scroll')
                     })
