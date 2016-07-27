@@ -1,0 +1,65 @@
+body{
+  background: #ccc;
+}
+.scroll_demo{
+  width: 540px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  margin: 30px auto;
+  .scroll_tab{
+    height: 34px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #666;
+    background: #f8f8f8;
+    .tab_item{
+      float: left;
+      font:14px/34px "Microsoft Yahei";
+      height: 34px;
+      text-align: center;
+      border-right: 1px solid #e5e5e5;
+      padding: 0 20px;
+    }
+    .tab_item.tab_active{
+      color: #00be3c;
+      background: #fff;
+      border-top: 2px solid #00be3c;
+      margin: -1px 0;
+    }
+  }
+  .scroll_wrap{
+    width: 100%;
+    height: 300px;
+    position: relative;
+    .scroll_cont{
+      height: 300px;
+      overflow: hidden;
+      h3{
+        font: 16px/3 "Microsoft Yahei";
+        text-align: center;
+      }
+      p{
+        font-size: 14px;
+        line-height: 20px;
+        text-indent: 2em;
+        margin-bottom: 10px;
+      }
+    }
+    /*滚动条*/
+    .scroll_bar{
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 100%;
+      background-color: #eaeaea;
+      .scroll_slider{
+        position: absolute;
+        top: 0;
+        left: 1px;
+        width: 8px;
+        height: 30px;
+        background-color: #fff;
+      }
+    }
+  }
+}
