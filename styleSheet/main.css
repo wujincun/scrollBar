@@ -29,10 +29,8 @@ body {
 }
 .scroll_demo .scroll_wrap {
   width: 100%;
-  height: 300px;
   position: relative;
   overflow: hidden;
-  /*滚动条*/
 }
 .scroll_demo .scroll_wrap .scroll_cont h3 {
   font: 16px/3 "Microsoft Yahei";
