@@ -30,6 +30,12 @@ body {
 .scroll_demo .scroll_wrap {
   width: 100%;
   position: relative;
+  height: 300px;
+  /*滚动条*/
+}
+.scroll_demo .scroll_wrap .scroll_cont {
+  height: 100%;
+  padding: 0 15px;
   overflow: hidden;
 }
 .scroll_demo .scroll_wrap .scroll_cont h3 {
