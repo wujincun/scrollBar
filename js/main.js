@@ -15,12 +15,12 @@ var Scroll = {};
                 contSelector: "",//滚动内容物选择器
                 barSelector: "",//滚动条选择器
                 sliderSelector: "",//滚动滑块选择器
-                tabItemSelector:'.tab_item',//标签选择器
-                tabActiveClass:'tab_active',//选中标签类名
-                anchorSelector:'.anchor',//锚点选择器   文章标题class
-                wheelStep:10,//滚轮步长
+                tabItemSelector: '.tab_item',//标签选择器
+                tabActiveClass: 'tab_active',//选中标签类名
+                anchorSelector: '.anchor',//锚点选择器   文章标题class
+                wheelStep: 10,//滚轮步长
                 correctSelector: ".correct_bot",//校正元素选择器
-                articalSelector:".scroll_ol"//文章选择器
+                articalSelector: ".scroll_ol"//文章选择器
             };
             $.extend(true, self.options, options || {});
             self._initDomEvent();
@@ -52,13 +52,13 @@ var Scroll = {};
         /*
          * 初始化文档高度
          * */
-        _initArticleHeight:function () {
+        _initArticleHeight: function () {
             var self = this,
                 lastArticle = self.$artical.last();
             var lastArticalHeight = lastArticle.height(),
                 contHeight = self.$cont.height();
-            if(lastArticalHeight < contHeight){
-                self.$correct[0].style.height = contHeight - lastArticalHeight - self.$anchor.outerHeight() +'px';
+            if (lastArticalHeight < contHeight) {
+                self.$correct[0].style.height = contHeight - lastArticalHeight - self.$anchor.outerHeight() + 'px';
             }
             return self;
         },
@@ -100,13 +100,13 @@ var Scroll = {};
             return self;
         },
         /*
-        * 初始化标签切换功能
-        * 在标签切换时，内容跟着切换，但是内容高度不足以占满容器时，不在内容顶部显示
-        * 课程中给的方案是在html结构中添加了一个空div，让其补足高度
-        * */
-        _initTabEvent:function () {
+         * 初始化标签切换功能
+         * 在标签切换时，内容跟着切换，但是内容高度不足以占满容器时，不在内容顶部显示
+         * 课程中给的方案是在html结构中添加了一个空div，让其补足高度
+         * */
+        _initTabEvent: function () {
             var self = this;
-            self.$tabItem.on('click',function(e){
+            self.$tabItem.on('click', function (e) {
                 e.preventDefault();
                 var index = $(this).index();
                 self.changeTabSelect(index);
@@ -160,8 +160,38 @@ var Scroll = {};
             var self = this;
             return self.$bar.height() - self.$slider.height()
         },
+        //获取指定锚点到上边界的像素数
+        getAnchorPosition: function (index) {
+            return this.$anchor.eq(index).position().top;
+        },
+        /*
+         * 获取每个锚点位置信息的数组
+         * */
+        getAllAnchorPosition: function () {
+            var self = this;
+            allPositionArr = [];
+            for (var i = 0; i < self.$anchor.length; i++) {
+                allPositionArr.push(self.$cont[0].scrollTop + self.getAnchorPosition(i))
+            }
+            return allPositionArr;
+        },
         scrollTo: function (positionVal) {
             var self = this;
+            var posArr = self.getAllAnchorPosition();
+            //滚动条的位置与tab标签的对应
+            function getIndex(positionVal){
+                for(var i=posArr.length-1;i>=0;i--){
+                    if(positionVal>=posArr[i]){
+                        return i
+                    }else{
+                        continue;
+                    }
+                }
+            }
+            //锚点数与标签数相同
+            if(posArr.length == self.$tabItem.length){
+                self.changeTabSelect((getIndex(positionVal)))
+            }
             self.$cont.scrollTop(positionVal)
         },
         //切换选中的标签
@@ -170,10 +200,7 @@ var Scroll = {};
                 active = self.options.tabActiveClass;
             return self.$tabItem.eq(index).addClass(active).siblings().removeClass(active);
         },
-        //获取指定锚点到上边界的像素数
-        getAnchorPosition:function (index) {
-            return this.$anchor.eq(index).position().top;
-        }
+
     });
     Scroll.CusScrollBar = CusScrollBar;
 })(window, document, jQuery);
