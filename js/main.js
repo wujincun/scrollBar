@@ -15,27 +15,52 @@ var Scroll = {};
                 contSelector: "",//滚动内容物选择器
                 barSelector: "",//滚动条选择器
                 sliderSelector: "",//滚动滑块选择器
-                wheelStep:10 //滚轮步长
+                tabItemSelector:'.tab_item',//标签选择器
+                tabActiveClass:'tab_active',//选中标签类名
+                anchorSelector:'.anchor',//锚点选择器   文章标题class
+                wheelStep:10,//滚轮步长
+                correctSelector: ".correct_bot",//校正元素选择器
+                articalSelector:".scroll_ol"//文章选择器
             };
             $.extend(true, self.options, options || {});
             self._initDomEvent();
-            self._initSlideDragEvent()
-                ._bindContScroll()
-                ._bindMOusewheel()
         },
+
         /*
          * 初始化DOM引用
          * @method _initDomEvent
          * @return {CusScrollBar}
          * */
         _initDomEvent: function () {
+            var self = this;
             var opts = this.options;
             this.$cont = $(opts.contSelector);
             this.$slider = $(opts.sliderSelector);
             this.$bar = opts.barSelector ? $(opts.barSelector) : self.$slider.parent();
+            this.$tabItem = $(opts.tabItemSelector);
+            this.$anchor = $(opts.anchorSelector);
+            this.$correct = $(opts.correctSelector);
+            this.$artical = $(opts.articalSelector);
             //获取文档对象
             this.$doc = $(doc);
-
+            self._initArticleHeight()
+                ._initSlideDragEvent()
+                ._bindContScroll()
+                ._bindMOusewheel()
+                ._initTabEvent()
+        },
+        /*
+         * 初始化文档高度
+         * */
+        _initArticleHeight:function () {
+            var self = this,
+                lastArticle = self.$artical.last();
+            var lastArticalHeight = lastArticle.height(),
+                contHeight = self.$cont.height();
+            if(lastArticalHeight < contHeight){
+                self.$correct[0].style.height = contHeight - lastArticalHeight - self.$anchor.outerHeight() +'px';
+            }
+            return self;
         },
         /*
          * 初始化滑块拖动功能
@@ -72,6 +97,22 @@ var Scroll = {};
                 })
 
             }
+            return self;
+        },
+        /*
+        * 初始化标签切换功能
+        * 在标签切换时，内容跟着切换，但是内容高度不足以占满容器时，不在内容顶部显示
+        * 课程中给的方案是在html结构中添加了一个空div，让其补足高度
+        * */
+        _initTabEvent:function () {
+            var self = this;
+            self.$tabItem.on('click',function(e){
+                e.preventDefault();
+                var index = $(this).index();
+                self.changeTabSelect(index);
+                //已经滚出可视区的内容高度+指定锚点与内容容器的高度
+                self.scrollTo(self.$cont[0].scrollTop + self.getAnchorPosition(index))
+            });
             return self;
         },
         /*
@@ -122,6 +163,16 @@ var Scroll = {};
         scrollTo: function (positionVal) {
             var self = this;
             self.$cont.scrollTop(positionVal)
+        },
+        //切换选中的标签
+        changeTabSelect: function (index) {
+            var self = this,
+                active = self.options.tabActiveClass;
+            return self.$tabItem.eq(index).addClass(active).siblings().removeClass(active);
+        },
+        //获取指定锚点到上边界的像素数
+        getAnchorPosition:function (index) {
+            return this.$anchor.eq(index).position().top;
         }
     });
     Scroll.CusScrollBar = CusScrollBar;

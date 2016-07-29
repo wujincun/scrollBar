@@ -42,6 +42,9 @@ body {
   font: 16px/3 "Microsoft Yahei";
   text-align: center;
 }
+.scroll_demo .scroll_wrap .scroll_cont .scroll_ol {
+  padding-bottom: 1px;
+}
 .scroll_demo .scroll_wrap .scroll_cont p {
   font-size: 14px;
   line-height: 20px;
